@@ -1,140 +1,141 @@
-# Awesome Pizza - Gestore Ordini
+# Awesome Pizza - Order Manager
 
-## Sommario
-1. [Introduzione](#introduzione)
-2. [Download e Installazione](#download-e-installazione)
-3. [Esecuzione del Progetto](#esecuzione-del-progetto)
-4. [Architettura e Tecnologie](#architettura-e-tecnologie)
-5. [Flusso Operativo](#flusso-operativo)
-6. [API e Documentazione](#api-e-documentazione)
-7. [Informazioni Aggiuntive](#informazioni-aggiuntive)
+## Summary
+1. [Introduction](#introduzione)
+2. [Download and Installation](#download-e-installazione)
+3. [Project Execution](#esecuzione-del-progetto)
+4. [Architecture and Technologies](#architettura-e-tecnologie)
+5. [Operational Flow](#flusso-operativo)
+6. [API and Documentation](#api-e-documentazione)
+7. [Additional Information](#informazioni-aggiuntive)
 
-## Introduzione
+## Introduction
 
-Awesome Pizza Manager è un'applicazione  sviluppata in Java/Spring Boot per la gestione del flusso degli ordini in una pizzeria. 
-Il sistema gestisce il ciclo di vita completo degli ordini, dal momento della creazione, alla preparazione e consegna, con un focus particolare sul tracciamento dello stato e sull'audit delle operazioni.
+Awesome Pizza Manager is an application developed in Java/Spring Boot for managing the order flow in a pizzeria. 
+The system manages the complete lifecycle of orders, from creation to preparation and delivery, with particular focus on state tracking and operation auditing.
 
-## Download e Installazione
+## Download and Installation
 
-### Prerequisiti
+### Prerequisites
 - Java Development Kit (JDK) 17
 - Apache Maven 3.9+
 - Git
 
-### Procedura di Download
+### Download Procedure
 ```bash
-# Clonare il repository
+Clone the repository
 git clone https://github.com/NotMikev/awesome-pizza-manager.git
 
-# Accedere alla directory del progetto
+Access the project directory
 cd order.manager
 ```
 
-## Esecuzione del Progetto
 
-### Configurazione Ambiente di Sviluppo
-1. Verificare la versione Java:
-   ```bash
-   java -version
-   ```
-   Output atteso: OpenJDK/Java versione 17.x.x
+## Project Execution
 
-2. Verificare l'installazione Maven:
-   ```bash
-   mvn -version
-   ```
-   Output atteso: Apache Maven 3.9.x
+### Development Environment Setup
+1. Verify Java version:
+```bash
+java -version
+```
+Expected output: OpenJDK/Java version 17.x.x
 
-### Avvio con IntelliJ IDEA
-1. Aprire IntelliJ IDEA
-2. Selezionare: `File` → `Open`
-3. Selezionare la cartella root del progetto (`order.manager`)
-4. Attendere che IntelliJ completi l'importazione Maven (icona in basso a destra)
-5. Configurazione Run:
-   - Aprire classe `PizzaOrdersManagerApplication`
-   - Click destro → `Run PizzaOrdersManagerApplication`
-   - Verificare nei log il messaggio: `Started PizzaOrdersManagerApplication in X.XXX seconds`
+2. Verify Maven installation:
+```bash
+mvn -version
+```
+Expected output: Apache Maven 3.9.x
 
-### Avvio con VS Code
-1. Prerequisiti VS Code:
-   - Estensione "Extension Pack for Java" (vscjava.vscode-java-pack)
-   - Estensione "Spring Boot Extension Pack" (Pivotal.vscode-spring-boot-pack)
+### Run with IntelliJ IDEA
+1. Open IntelliJ IDEA
+2. Select: `File` → `Open`
+3. Select the project root folder (`order.manager`)
+4. Wait for IntelliJ to complete Maven import (icon bottom right)
+5. Run Configuration:
+- Open class `PizzaOrdersManagerApplication`
+- Right click → `Run PizzaOrdersManagerApplication`
+- Verify log message: `Started PizzaOrdersManagerApplication in X.XXX seconds`
 
-2. Aprire il progetto:
-   - `File` → `Open Folder`
-   - Selezionare la cartella `order.manager`
-   - Attendere l'indicizzazione del progetto (icona in basso a destra)
+### Run with VS Code
+1. VS Code Prerequisites:
+- Extension "Extension Pack for Java" (vscjava.vscode-java-pack)
+- Extension "Spring Boot Extension Pack" (Pivotal.vscode-spring-boot-pack)
 
-3. Avvio applicazione:
-   - Aprire il Command Palette (⇧⌘P su macOS, Ctrl+Shift+P su Windows)
-   - Digitare: `Spring Boot Dashboard`
-   - Selezionare `order.manager` e cliccare sul tasto play
-   - Verificare nei log: `Started PizzaOrdersManagerApplication`
+2. Open project:
+- `File` → `Open Folder`
+- Select folder `order.manager`
+- Wait for project indexing (icon bottom right)
 
-### Avvio Standalone
-1. Compilazione:
-   ```bash
-   # Dalla directory root del progetto
-   ./mvnw clean install -DskipTests
-   ```
-   Verificare output: `BUILD SUCCESS`
+3. Start application:
+- Open Command Palette (⇧⌘P on macOS, Ctrl+Shift+P on Windows)
+- Type: `Spring Boot Dashboard`
+- Select `order.manager` and click play button
+- Verify in logs: `Started PizzaOrdersManagerApplication`
 
-2. Verifica del JAR:
-   ```bash
+### Standalone Run
+1. Build:
+```bash
+# From project root directory
+./mvnw clean install -DskipTests
+```
+Verify output: `BUILD SUCCESS`
+
+2. Verify JAR:
+```bash
    ls -l target/order.manager-0.0.1-SNAPSHOT.jar
-   ```
-   Dimensione attesa: ~40MB
+   ```lean install -DskipTests
+```
+Expected size: ~40MB
 
-3. Esecuzione:
-   ```bash
+3. Run:
+```bash
    java -jar target/order.manager-0.0.1-SNAPSHOT.jar
    ```
-   
-4. Verifica avvio corretto:
-   - Attendere il log: `Started PizzaOrdersManagerApplication`
-   - Nessun errore nel log
-   - Endpoint test: http://localhost:8080/awesome/actuator/health
-   - Risposta attesa: `{"status":"UP"}`
 
-### Verifica Installazione
+4. Verify correct startup:
+- Wait for log: `Started PizzaOrdersManagerApplication`
+- No errors in log
+- Test endpoint: http://localhost:8080/awesome/actuator/health
+- Expected response: `{"status":"UP"}`
+
+### Installation Check
 1. Swagger UI: http://localhost:8080/awesome/swagger-ui.html
 2. H2 Console: http://localhost:8080/awesome/h2-console
 3. Health Check: http://localhost:8080/awesome/actuator/health
 
-### Troubleshooting Comuni
-- **Errore porta 8080 occupata**:
-  ```bash
+### Common Troubleshooting
+- **Port 8080 already in use error**:
+```bash
   lsof -i :8080
   kill -9 [PID]
   ```
-  
-- **Errore Java version**:
-  ```bash
+
+- **Java version error**:
+```bash
   export JAVA_HOME=$(/usr/libexec/java_home -v 17)
   java -version
   ```
-
-- **Errore Maven**:
+- **Maven error**:
   ```bash
   ./mvnw -X clean install
   ```
-  -X Per log dettagliato
+  -X For detailed log
 
-## Architettura e Tecnologie
+## Architecture and Technologies
 
-### Stack Tecnologico
+### Technology Stack
 - **Framework**: Spring Boot 3.5.7
-- **Linguaggio**: Java 17
+- **Language**: Java 17
 - **Database**: H2 (in-memory)
 - **Build Tool**: Maven
-- **Documentazione API**: OpenAPI/Swagger 2.8.13
+- **API Documentation**: OpenAPI/Swagger 2.8.13
 - **Logging**: Logback/Slf4j
 - **Testing**: JUnit, Spring Test
-- **Librerie**: 
-  - Lombok 1.18.34
-  - MapStruct 1.6.3
+- **Libraries**: 
+- Lombok 1.18.34
+- MapStruct 1.6.3
 
-### Struttura del Progetto
+### Project Structure
 ```
 src/
 ├── main/
@@ -159,96 +160,96 @@ src/
 │       └── logback-spring.xml     # Config logging
 ```
 
-## Flusso Operativo
+## Operational Flow
 
-### Stati dell'Ordine
-1. **NEW**: Ordine ricevuto e registrato
-2. **IN_PROGRESS**: Ordine in preparazione
-3. **READY**: Ordine pronto per la consegna
+### Order States
+1. **NEW**: Order received and registered
+2. **IN_PROGRESS**: Order in preparation
+3. **READY**: Order ready for delivery
 
-### Workflow Operativo
-1. Cliente effettua un ordine → Stato NEW
-2. Sistema assegna un codice univoco
-3. Operatore può visualizzare tutti gli ordini in stato NEW
-4. Operatore prende in carico → Stato IN_PROGRESS
-5. Operatore può visualizzare ordini per ogni stato (NEW, IN_PROGRESS, READY)
-6. Completamento preparazione → Stato READY
+### Operational Workflow
+1. Customer places an order → State NEW
+2. System assigns a unique code
+3. Operator can view all orders in state NEW
+4. Operator takes charge → State IN_PROGRESS
+5. Operator can view orders by each state (NEW, IN_PROGRESS, READY)
+6. Preparation completion → State READY
 
-## API e Documentazione
+## API and Documentation
 
-### Endpoints REST
+### REST Endpoints
 
-#### Gestione Ordini
+#### Order Management
 - **POST** `/awesome/api/purchase`
-  - Crea nuovo ordine
+  - Creates a new order
   - Request body: `{ "pizza": "string" }`
-  - Response: PurchaseDto con codice ordine
+  - Response: PurchaseDto with order code
 
 - **GET** `/awesome/api/purchase/status/{code}`
-  - Verifica stato ordine
-  - Response: PurchaseDto con stato attuale
+  - Checks order status
+  - Response: PurchaseDto with current status
 
 - **GET** `/awesome/api/purchase/new`
-  - Recupera tutti gli ordini in stato NEW
-  - Response: Lista di PurchaseDto con stato NEW
+  - Retrieves all orders in state NEW
+  - Response: List of PurchaseDto in state NEW
 
 - **GET** `/awesome/api/purchase/status/{status}`
-  - Recupera ordini per stato specifico (NEW, IN_PROGRESS, READY)
-  - Response: Lista di PurchaseDto dello stato richiesto
+  - Retrieves orders by specific state (NEW, IN_PROGRESS, READY)
+  - Response: List of PurchaseDto in requested state
   
 - **POST** `/awesome/api/purchase/next`
-  - Prende in carico il prossimo ordine
-  - Response: PurchaseDto dell'ordine assegnato
+  - Takes the next order to process
+  - Response: PurchaseDto of assigned order
   
 - **POST** `/awesome/api/purchase/next/{code}`
-  - Prende in carico un ordine specifico
-  - Response: PurchaseDto dell'ordine aggiornato
+  - Takes a specific order
+  - Response: PurchaseDto of updated order
   
 - **POST** `/awesome/api/purchase/{code}/ready`
-  - Segna un ordine come pronto
-  - Response: PurchaseDto con stato READY
+  - Marks an order as ready
+  - Response: PurchaseDto with READY state
 
-### Documentazione OpenAPI
-La documentazione Swagger è disponibile all'endpoint:
+### OpenAPI Documentation
+Swagger documentation is available at:
 ```
 http://localhost:8080/awesome/swagger-ui.html
 ```
 
-## Informazioni Aggiuntive
+## Additional Information
 
-### Versione Corrente
-- Versione: 0.0.1-SNAPSHOT
-- Stato: In Sviluppo Attivo
+### Current Version
+- Version: 0.0.1-SNAPSHOT
+- Status: Active Development
 
-### Monitoraggio
-Endpoint Actuator disponibili:
+### Monitoring
+Available Actuator endpoints:
 - Health Check: `/awesome/actuator/health`
 
 ### Database
-- Console H2: `/awesome/h2-console`
+- H2 Console: `/awesome/h2-console`
 - URL JDBC: `jdbc:h2:mem:awesome-db`
-- Database in-memory (Nel file application.properties presenti info necessarie per accesso)
+- In-memory database (needed info in application.properties)
 
 ### Testing
-Esecuzione dei test:
+Run tests:
 ```bash
 ./mvnw test
 ```
 
-Il progetto include:
-- Test di Integrazione API (`ApiAuditIntegrationTest`)
-- Test del Flusso Acquisto (`PurchaseFlowTest`)
-- Test di Presa in Carico (`TakeNextByCodeTest`)
-- Test Applicazione (`PizzaOrdersManagerApplicationTests`)
+The project includes:
+- API Integration Tests (`ApiAuditIntegrationTest`)
+- Purchase Flow Tests (`PurchaseFlowTest`)
+- Take Order Tests (`TakeNextByCodeTest`)
+- Application Tests (`PizzaOrdersManagerApplicationTests`)
 
-### Note di Debug
-- Logging dettagliato configurato in `logback-spring.xml`
-- Log applicativi in `/logs/app.log` (giorno successivo vengono storicizzati in file con data specifica)
-- Log specifico pizzeria in `/logs/awesome-pizza.log`
-- Log di audit in database H2
+### Debug Notes
+- Detailed logging configured in `logback-spring.xml`
+- Application logs in `/logs/app.log` (archived daily by date)
+- Pizzeria-specific log in `/logs/awesome-pizza.log`
+- Audit log in H2 database
 
-### Contribuzione
-1. Effettuare fork del repository
-2. Creare un branch per le modifiche
-3. Implementare le modifiche con relativi test
-4. Aprire una Pull Request
+### Contribution
+1. Fork the repository
+2. Create a branch for your changes
+3. Implement changes with related tests
+4. Open a Pull Request
