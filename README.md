@@ -169,8 +169,10 @@ src/
 ### Workflow Operativo
 1. Cliente effettua un ordine → Stato NEW
 2. Sistema assegna un codice univoco
-3. Operatore prende in carico → Stato IN_PROGRESS
-4. Completamento preparazione → Stato READY
+3. Operatore può visualizzare tutti gli ordini in stato NEW
+4. Operatore prende in carico → Stato IN_PROGRESS
+5. Operatore può visualizzare ordini per ogni stato (NEW, IN_PROGRESS, READY)
+6. Completamento preparazione → Stato READY
 
 ## API e Documentazione
 
@@ -185,6 +187,14 @@ src/
 - **GET** `/awesome/api/purchase/status/{code}`
   - Verifica stato ordine
   - Response: PurchaseDto con stato attuale
+
+- **GET** `/awesome/api/purchase/new`
+  - Recupera tutti gli ordini in stato NEW
+  - Response: Lista di PurchaseDto con stato NEW
+
+- **GET** `/awesome/api/purchase/status/{status}`
+  - Recupera ordini per stato specifico (NEW, IN_PROGRESS, READY)
+  - Response: Lista di PurchaseDto dello stato richiesto
   
 - **POST** `/awesome/api/purchase/next`
   - Prende in carico il prossimo ordine

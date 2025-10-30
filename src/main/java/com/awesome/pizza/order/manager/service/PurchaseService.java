@@ -2,6 +2,9 @@ package com.awesome.pizza.order.manager.service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.List;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,5 +118,25 @@ public class PurchaseService {
         logger.debug("checkPurchaseStatusByCode returning={}", dto);
 
         return dto;
+    }
+
+    public List<PurchaseDto> findNewPurchases() {
+        logger.debug("findNewPurchases called");
+        return findPurchasesByStatus("NEW");
+    }
+
+    public List<PurchaseDto> findPurchasesByStatus(String status) {
+        logger.debug("findPurchasesByStatus called with status={}", status);
+
+        List<PurchaseDto> dtos = purchaseRepository
+                .findByStatusOrderByCreatedAtAsc(status)
+                .map(purchases -> purchases.stream()
+                .map(purchaseMapper::toDto)
+                .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
+
+        logger.debug("findPurchasesByStatus returning {} items", dtos.size());
+
+        return dtos;
     }
 }

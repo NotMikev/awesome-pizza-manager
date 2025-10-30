@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.annotation.Validated;
+import java.util.List;
 
 import com.awesome.pizza.order.manager.dto.purchase.PurchaseDto;
 import com.awesome.pizza.order.manager.dto.error.ApiError;
@@ -210,6 +211,93 @@ public class PurchaseController {
         PurchaseDto purchase = purchaseService.markPurchaseReady(code);
         logger.debug("markReady controller returning={}", purchase);
         return ResponseEntity.ok(purchase);
+    }
+
+    @GetMapping("/new")
+    @Operation(
+            summary = "Get all NEW pizza orders",
+            description = "Returns the list of all orders in NEW status, ordered by creation date.",
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "List of NEW orders retrieved successfully",
+                        content = @Content(
+                                mediaType = "application/json",
+                                schema = @Schema(implementation = PurchaseDto.class),
+                                examples = @ExampleObject(value = """
+                        [
+                            {
+                                "code": "uuid-1234-abcd",
+                                "pizza": "Margherita",
+                                "status": "NEW",
+                                "createdAt": "2025-10-28T22:00:00",
+                                "updatedAt": "2025-10-28T22:00:00"
+                            },
+                            {
+                                "code": "uuid-5678-efgh",
+                                "pizza": "Marinara",
+                                "status": "NEW",
+                                "createdAt": "2025-10-28T22:01:00",
+                                "updatedAt": "2025-10-28T22:01:00"
+                            }
+                        ]
+                        """)
+                        )
+                )
+            }
+    )
+    public ResponseEntity<List<PurchaseDto>> getNewPurchases() {
+        logger.debug("getNewPurchases controller called");
+        List<PurchaseDto> purchases = purchaseService.findNewPurchases();
+        logger.debug("getNewPurchases controller returning {} items", purchases.size());
+        return ResponseEntity.ok(purchases);
+    }
+
+    @GetMapping("/status/{status}")
+    @Operation(
+            summary = "Get all pizza orders by status",
+            description = "Returns the list of all orders in the specified status, ordered by creation time.",
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "List of orders retrieved successfully",
+                        content = @Content(
+                                mediaType = "application/json",
+                                schema = @Schema(implementation = PurchaseDto.class),
+                                examples = @ExampleObject(value = """
+                        [
+                            {
+                                "code": "uuid-1234-abcd",
+                                "pizza": "Margherita",
+                                "status": "IN_PROGRESS",
+                                "createdAt": "2025-10-28T22:00:00",
+                                "updatedAt": "2025-10-28T22:05:00"
+                            },
+                            {
+                                "code": "uuid-5678-efgh",
+                                "pizza": "Marinara",
+                                "status": "IN_PROGRESS",
+                                "createdAt": "2025-10-28T22:01:00",
+                                "updatedAt": "2025-10-28T22:06:00"
+                            }
+                        ]
+                        """)
+                        )
+                ),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "Invalid status value provided. Must be one of: NEW, IN_PROGRESS, READY"
+                )
+            }
+    )
+    public ResponseEntity<List<PurchaseDto>> getPurchasesByStatus(
+            @Parameter(description = "Order status to filter by", required = true, example = "IN_PROGRESS")
+            @Pattern(regexp = "^(NEW|IN_PROGRESS|READY)$", message = "Status must be one of: NEW, IN_PROGRESS, READY")
+            @PathVariable String status) {
+        logger.debug("getPurchasesByStatus controller called with status={}", status);
+        List<PurchaseDto> purchases = purchaseService.findPurchasesByStatus(status);
+        logger.debug("getPurchasesByStatus controller returning {} items", purchases.size());
+        return ResponseEntity.ok(purchases);
     }
 
     @GetMapping("/{code}")
